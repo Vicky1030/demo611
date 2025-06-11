@@ -27,6 +27,6 @@ public class AqiData {
         alist.add(a5);
         alist.add(a6);
         String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
-        JsonUtil.writeListToJson(alist,"/NepDatas/JSONData/aqi.json" );
+        FileUtil.writeObject(ProPaht+"aqi.json", alist);
     }
 }

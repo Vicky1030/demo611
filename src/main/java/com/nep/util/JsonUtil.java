@@ -12,7 +12,9 @@ import java.util.*;
 public class JsonUtil {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
-
+    public static <T> List<T> readListFromJson(InputStream inputStream, TypeReference<List<T>> typeReference) throws IOException {
+        return objectMapper.readValue(inputStream, typeReference);
+    }
     /**
      * 从 classpath 下读取 JSON 文件并反序列化为 List<T>
      */

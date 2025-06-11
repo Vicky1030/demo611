@@ -13,14 +13,13 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import com.nep.util.JavafxUtil;
 import java.text.SimpleDateFormat;
-
 import com.nep.util.FileUtil;
 import com.nep.service.AqiFeedbackService;
 import com.nep.service.impl.AqiFeedbackServiceImpl;
-
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import java.io.InputStream;
 import java.util.ResourceBundle;
 
 public class NepmAqiAssignViewController implements Initializable {
@@ -82,42 +81,54 @@ public class NepmAqiAssignViewController implements Initializable {
         //标签初始化
         initConroller();
         //初始化网格员
-        String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
-        List<GridMember> glist = (List<GridMember>) JsonUtil.readListFromJson(ProPaht+"grid_member.json",new TypeReference<List<GridMember>>() {});
-        for (GridMember gm : glist) {
-            if(gm.getState().equals(2)){
-                combo_realName.getItems().add(gm.getGmName());
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("NepDatas/JSONData/grid_member.json")) {
+            if (inputStream != null) {
+                List<GridMember> glist = JsonUtil.readListFromJson(inputStream, new TypeReference<List<GridMember>>() {});
+                for (GridMember gm : glist) {
+                    if (gm.getState().equals(2)) {
+                        combo_realName.getItems().add(gm.getGmName());
+                    }
+                }
+            } else {
+                System.err.println("未找到资源文件: NepDatas/JSONData/grid_member.json");
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public void queryFeedback(){
+    public void queryFeedback() {
         String afId = txt_afId.getText();
-        String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
-
-        List<AqiFeedback> alist = (List<AqiFeedback>)JsonUtil.readListFromJson(ProPaht+"aqi_feedback.aqi",new TypeReference<List<AqiFeedback>>() {});
-        boolean flag = true;
-        for (AqiFeedback af : alist) {
-            if(af.getAfId().toString().equals(afId) && af.getState().equals(0)){
-                flag = false;
-                label_afId.setText(af.getAfId()+"");
-                label_afName.setText(af.getAfname());
-                label_address.setText(af.getAddress());
-                label_cityName.setText(af.getCityName());
-                Date date = af.getAfDate();  // 拿到 Date 类型
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  // 或 yyyy-MM-dd HH:mm:ss
-                String dateStr = sdf.format(date);  // 转换为 String
-                label_date.setText(dateStr);
-                label_estimateGrade.setText(String.valueOf(af.getEstimatedGrade()));
-                label_infomation.setText(af.getInformation());
-                label_proviceName.setText(af.getProvinceName());
-                break;
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("NepDatas/JSONData/aqi_feedback.aqi")) {
+            if (inputStream != null) {
+                List<AqiFeedback> alist = JsonUtil.readListFromJson(inputStream, new TypeReference<List<AqiFeedback>>() {});
+                boolean flag = true;
+                for (AqiFeedback af : alist) {
+                    if (af.getAfId().toString().equals(afId) && af.getState().equals(0)) {
+                        flag = false;
+                        label_afId.setText(af.getAfId() + "");
+                        label_afName.setText(af.getAfname());
+                        label_address.setText(af.getAddress());
+                        label_cityName.setText(af.getCityName());
+                        Date date = af.getAfDate();  // 拿到 Date 类型
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  // 或 yyyy-MM-dd HH:mm:ss
+                        String dateStr = sdf.format(date);  // 转换为 String
+                        label_date.setText(dateStr);
+                        label_estimateGrade.setText(String.valueOf(af.getEstimatedGrade()));
+                        label_infomation.setText(af.getInformation());
+                        label_proviceName.setText(af.getProvinceName());
+                        break;
+                    }
+                }
+                if (flag) {
+                    JavafxUtil.showAlert(aqiInfoStage, "查询失败", "未找到当前编号反馈信息", "请重新输入AQI反馈数据编号", "warn");
+                    initConroller();
+                }
+            } else {
+                System.err.println("未找到资源文件: NepDatas/JSONData/aqi_feedback.aqi");
             }
-
-        }
-        if(flag){
-            JavafxUtil.showAlert(aqiInfoStage, "查询失败", "未找到当前编号反馈信息", "请重新输入AQI反馈数据编号","warn");
-            initConroller();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

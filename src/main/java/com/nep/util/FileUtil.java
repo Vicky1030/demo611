@@ -1,6 +1,7 @@
 package com.nep.util;
 
 import java.io.*;
+import java.net.URL;
 
 public class FileUtil {
 
@@ -29,6 +30,19 @@ public class FileUtil {
         }
         return object;
     }
+
+    public static void writeObjectFromClasspath(String filePath, Object object) throws IOException {
+        URL resource = FileUtil.class.getClassLoader().getResource(filePath);
+        if (resource != null) {
+            try (FileOutputStream fos = new FileOutputStream(resource.getFile());
+                 ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+                oos.writeObject(object);
+            }
+        } else {
+            System.err.println("未找到资源文件: " + filePath);
+        }
+    }
+
     public static void writeObject(String filepath,Object obj){
         File file = new File(filepath);
         OutputStream os = null;

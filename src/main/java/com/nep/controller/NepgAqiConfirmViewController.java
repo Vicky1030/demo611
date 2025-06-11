@@ -1,5 +1,4 @@
 package com.nep.controller;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.nep.dto.AqiLimitDto;
 import com.nep.po.AqiFeedback;
@@ -24,6 +23,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -132,29 +132,49 @@ public class NepgAqiConfirmViewController implements Initializable {
         ObservableList<AqiFeedback> data = FXCollections.observableArrayList();
         String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
 
-        List<AqiFeedback> afList = (List<AqiFeedback>) JsonUtil.readListFromJson(ProPaht+"aqi_feedback.json",new TypeReference<List<AqiFeedback>>() {});
-        for(AqiFeedback afb:afList){
-            if(afb.getGmId()!= null && afb.getGmId().equals(gridMember.getGmId()) && afb.getState().equals(1)){
-                data.add(afb);
-            }
-        }
-        txt_tableView.setItems(data);
-        //添加编号文本框事件监听
-        txt_afId.focusedProperty().addListener((obs,wasFocused,isNowFocused)->{
-            if(!isNowFocused){
-                boolean flag = true;
-                for(AqiFeedback afb:afList){
-                    if(afb.getGmId() != null && afb.getAfId().toString().equals(txt_afId.getText()) ){
-                        flag = false;
-                        return;
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("NepDatas/JSONData/aqi_feedback.json")) {
+            if (inputStream != null) {
+                List<AqiFeedback> afList = JsonUtil.readListFromJson(inputStream, new TypeReference<List<AqiFeedback>>() {
+                });
+                for (AqiFeedback afb : afList) {
+                    if (afb.getGmId() != null && afb.getGmId().equals(gridMember.getGmId()) && afb.getState().equals(1)) {
+                        data.add(afb);
                     }
                 }
-                if(flag){
-                    JavafxUtil.showAlert(primaryStage, "数据错误", "AQI反馈数据编号有误", "请重新输入AQI反馈数据编号","warn");
+                txt_tableView.setItems(data);
+            } else {
+                System.err.println("未找到资源文件: NepDatas/JSONData/aqi_feedback.json");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //添加编号文本框事件监听
+        txt_afId.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (!isNowFocused) {
+                boolean flag = true;
+                try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("NepDatas/JSONData/aqi_feedback.json")) {
+                    if (inputStream != null) {
+                        List<AqiFeedback> afList = JsonUtil.readListFromJson(inputStream, new TypeReference<List<AqiFeedback>>() {
+                        });
+                        for (AqiFeedback afb : afList) {
+                            if (afb.getGmId() != null && afb.getAfId().toString().equals(txt_afId.getText())) {
+                                flag = false;
+                                return;
+                            }
+                        }
+                    } else {
+                        System.err.println("未找到资源文件: NepDatas/JSONData/aqi_feedback.json");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (flag) {
+                    JavafxUtil.showAlert(primaryStage, "数据错误", "AQI反馈数据编号有误", "请重新输入AQI反馈数据编号", "warn");
                     txt_afId.setText("");
                 }
             }
         });
+
         txt_so2.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {

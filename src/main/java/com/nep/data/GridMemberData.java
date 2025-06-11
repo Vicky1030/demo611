@@ -47,6 +47,6 @@ public class GridMemberData {
         glist.add(gm4);
         glist.add(gm5);
         String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
-        JsonUtil.writeListToJson( glist,"/NepDatas/JSONData/grid_member.json");
+        FileUtil.writeObject(ProPaht+"gridmember.json", glist);
     }
 }

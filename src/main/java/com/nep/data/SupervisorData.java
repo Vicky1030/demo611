@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.nep.po.Supervisor;
 import com.nep.util.JsonUtil;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,14 @@ public class SupervisorData {
         alist.add(s1);
         alist.add(s2);
         alist.add(s3);
-        String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
-        JsonUtil.writeListToJson(alist, ProPaht+"supervisor.json");
+        try (InputStream inputStream = SupervisorData.class.getClassLoader().getResourceAsStream("NepDatas/JSONData/supervisor.json")) {
+            if (inputStream != null) {
+                JsonUtil.readListFromJson(inputStream, new TypeReference<List<Supervisor>>() {});
+            } else {
+                System.err.println("未找到资源文件: NepDatas/JSONData/supervisor.json");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,6 +1,4 @@
 package com.nep.data;
-
-
 import com.nep.po.GridCity;
 import com.nep.po.GridProvince;
 import com.nep.util.FileUtil;
@@ -47,9 +45,12 @@ public class ProvinceCityData {
         cityList.add(new GridCity(14, "南昌市", 14,"江西省", null));
         cityList.add(new GridCity(15, "济南市", 15,"山东省", null));
         cityList.add(new GridCity(16, "郑州市", 16, "河南省", null));
-        String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
-        JsonUtil.writeListToJson(cityList,ProPaht+"grid_city.json" );
-        String ProPahth = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
-        JsonUtil.writeListToJson(provinceList,ProPahth+"grid_province.json");
+
+        try {
+            FileUtil.writeObjectFromClasspath("NepDatas/JSONData/grid_city.json", cityList);
+            FileUtil.writeObjectFromClasspath("NepDatas/JSONData/grid_province.json", provinceList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

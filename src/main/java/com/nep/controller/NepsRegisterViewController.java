@@ -61,7 +61,13 @@ public class NepsRegisterViewController {
         supervisor.setRealName(txt_id.getText());
         supervisor.setPassword(txt_password.getText());
         supervisor.setRealName(txt_realName.getText());
-        supervisor.setSex(Integer.valueOf(txt_sex.getText()));
+        if ("女".equals(txt_sex.getText())) {
+            supervisor.setSex(0);
+        } else if ("男".equals(txt_sex.getText())) {
+            supervisor.setSex(1);
+        }
+        // 确保设置了 telId 属性
+        supervisor.setTelId(txt_id.getText()); // 假设 txt_id 是手机号输入框
         boolean flag = supervisorService.register(supervisor);
         if(flag){
             JavafxUtil.showAlert(primaryStage, "注册成功", txt_id.getText()+" 账号注册成功!","可以进行用户登录!" ,"info");

@@ -19,10 +19,15 @@ public class AdminData {
         a2.setAdminId(1002);
         a2.setPassword("222");
         a2.setAdminCode("刘德华");
+
         List<Admin> alist = new ArrayList<Admin>();
         alist.add(a1);
         alist.add(a2);
-        String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
-        JsonUtil.writeListToJson(alist,"/NepDatas/JSONData/admins.json");
+
+        try {
+            FileUtil.writeObjectFromClasspath("NepDatas/JSONData/admin.json", alist);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

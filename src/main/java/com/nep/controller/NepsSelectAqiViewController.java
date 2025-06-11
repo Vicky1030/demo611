@@ -9,21 +9,26 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import com.nep.util.JavafxUtil;
 import com.nep.NepsMain;
-
 import com.nep.util.FileUtil;
 import com.nep.service.AqiFeedbackService;
 import com.nep.service.impl.AqiFeedbackServiceImpl;
 import com.nep.util.CommonUtil;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.io.InputStream;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
+
 public class NepsSelectAqiViewController implements Initializable {
     @FXML
     private TableView<Aqi> txt_tableView;
