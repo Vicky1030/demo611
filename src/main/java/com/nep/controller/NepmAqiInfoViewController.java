@@ -8,14 +8,18 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import com.nep.po.AqiFeedback;
 import com.nep.util.FileUtil;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class NepmAqiInfoViewController implements Initializable {
+
+    private static final Logger LOGGER = Logger.getLogger(NepmAqiInfoViewController.class.getName());
 
     @FXML
     private TableView<AqiFeedback> txt_tableView;
@@ -30,17 +34,16 @@ public class NepmAqiInfoViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // TODO Auto-generated method stub
-        //初始化table 数据表
+        // 初始化table 数据表
         TableColumn<AqiFeedback, Integer> afIdColumn = new TableColumn<>("编号");
         afIdColumn.setMinWidth(40);
         afIdColumn.setStyle("-fx-alignment: center;");	//居中
         afIdColumn.setCellValueFactory(new PropertyValueFactory<>("afId"));
 
-        TableColumn<AqiFeedback, String> proviceNameColumn = new TableColumn<>("省区域");
-        proviceNameColumn.setMinWidth(60);
-        proviceNameColumn.setStyle("-fx-alignment: center;");	//居中
-        proviceNameColumn.setCellValueFactory(new PropertyValueFactory<>("proviceName"));
+        TableColumn<AqiFeedback, String> provinceNameColumn = new TableColumn<>("省区域");
+        provinceNameColumn.setMinWidth(60);
+        provinceNameColumn.setStyle("-fx-alignment: center;");	//居中
+        provinceNameColumn.setCellValueFactory(new PropertyValueFactory<>("provinceName")); // 修正拼写
 
         TableColumn<AqiFeedback, String> cityNameColumn = new TableColumn<>("市区域");
         cityNameColumn.setMinWidth(60);
@@ -64,19 +67,33 @@ public class NepmAqiInfoViewController implements Initializable {
 
         TableColumn<AqiFeedback, String> infoColumn = new TableColumn<>("反馈信息");
         infoColumn.setMinWidth(210);
-        infoColumn.setCellValueFactory(new PropertyValueFactory<>("infomation"));
+        infoColumn.setCellValueFactory(new PropertyValueFactory<>("information")); // 修正拼写
 
-        txt_tableView.getColumns().addAll(afIdColumn, proviceNameColumn,cityNameColumn,estimateGradeColumn,dateColumn,afNameColumn,infoColumn);
+        txt_tableView.getColumns().addAll(afIdColumn, provinceNameColumn, cityNameColumn,
+                estimateGradeColumn, dateColumn, afNameColumn, infoColumn);
+
         ObservableList<AqiFeedback> data = FXCollections.observableArrayList();
-        String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/ObjectData/";
-        List<AqiFeedback> afList = (List<AqiFeedback>) FileUtil.readObject(ProPaht+"aqifeedback.txt");
-        for(AqiFeedback afb:afList){
-            if(afb.getState().equals("未指派")){
-                data.add(afb);
-            }
 
+        try {
+            // 使用资源路径而非绝对路径
+            List<AqiFeedback> afList = (List<AqiFeedback>) FileUtil.readObject(
+                    "NepDatas/ObjectData/aqifeedback.txt");
+
+            // 检查afList是否为null
+            if (afList != null) {
+                for (AqiFeedback afb : afList) {
+                    if ("未指派".equals(afb.getState())) { // 避免NPE的字符串比较方式
+                        data.add(afb);
+                    }
+                }
+            } else {
+                LOGGER.warning("未找到AQI反馈数据或数据为空");
+            }
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "加载AQI反馈数据失败", e);
+            // 可以在这里添加UI提示，告知用户加载数据失败
         }
+
         txt_tableView.setItems(data);
     }
-
 }

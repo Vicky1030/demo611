@@ -12,6 +12,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import com.nep.po.AqiFeedback;
 import com.nep.util.FileUtil;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -91,9 +92,14 @@ public class NepmConfirmInfoViewController implements Initializable {
 
         txt_tableView.getColumns().addAll(afIdColumn, proviceNameColumn,cityNameColumn,estimateGradeColumn,dateColumn,afNameColumn,so2Column,coColumn,pmColumn,confirmLevelColumn,confirmExplainColumn,confirmDateColumn,gmNameColumn);
         ObservableList<AqiFeedback> data = FXCollections.observableArrayList();
-        String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/ObjectData/";
+        String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
 
-        List<AqiFeedback> afList = (List<AqiFeedback>) JsonUtil.readListFromJson(ProPaht+"aqi_feedback.json",new TypeReference<List<AqiFeedback>>() {});
+        List<AqiFeedback> afList = null;
+        try {
+            afList = (List<AqiFeedback>) JsonUtil.readListFromJson(ProPaht+"aqi_feedback.json",new TypeReference<List<AqiFeedback>>() {});
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         for(AqiFeedback afb:afList){
             if(afb.getState().equals(2)){
                 data.add(afb);

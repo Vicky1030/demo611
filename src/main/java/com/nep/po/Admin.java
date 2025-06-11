@@ -8,7 +8,7 @@ public class Admin implements Serializable {
     private static final long serialVersionUID = 568262933260141034L;
 
 	@JsonProperty("admin_id")
-	private int adminId;
+	private String adminId;
 
 	@JsonProperty("admin_code")
 	private String adminCode;
@@ -19,17 +19,17 @@ public class Admin implements Serializable {
 	public Admin() {
 		super();
 	}
-	public Admin(int adminId, String adminCode, String password, String remarks) {
+	public Admin(String adminId, String adminCode, String password, String remarks) {
 		super();
 		this.adminId = adminId;
 		this.adminCode = adminCode;
 		this.password = password;
 		this.remarks = remarks;
 	}
-	public void setAdminId(int adminId) {
+	public void setAdminId(String adminId) {
 		this.adminId = adminId;
 	}
-	public int getAdminId() {
+	public String getAdminId() {
 		return this.adminId;
 	}
 	public void setAdminCode(String adminCode) {

@@ -23,6 +23,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -259,7 +260,12 @@ public class NepgAqiConfirmViewController implements Initializable {
         //刷新页面数据表格
         ObservableList<AqiFeedback> data = FXCollections.observableArrayList();
         String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
-        List<AqiFeedback> aList = (List<AqiFeedback>)JsonUtil.readListFromJson(ProPaht+"aqi_feedback.txt",new TypeReference<List<AqiFeedback>>() {});
+        List<AqiFeedback> aList = null;
+        try {
+            aList = (List<AqiFeedback>) JsonUtil.readListFromJson(ProPaht+"aqi_feedback.txt",new TypeReference<List<AqiFeedback>>() {});
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         for(AqiFeedback a:aList){
             if(a.getGmId() != null && a.getGmId().equals(gridMember.getGmId()) && a.getState().equals(1)){
                 data.add(a);

@@ -9,6 +9,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class NepgLoginViewController {
     @FXML
     private TextField txt_id;
@@ -32,7 +34,7 @@ public class NepgLoginViewController {
         this.txt_password = txt_password;
     }
 
-    public void login(){
+    public void login() throws IOException {
         if(txt_id.getText().equals("")){
             JavafxUtil.showAlert(primaryStage, "数据格式错误", "登录账号不能为空", "请重新输入登录账号","warn");
             return;
@@ -42,7 +44,12 @@ public class NepgLoginViewController {
             return;
         }
         NepgAqiConfirmViewController.primaryStage = primaryStage;
-        GridMember gm = gridMemberService.login(txt_id.getText(), txt_password.getText());
+        GridMember gm = null;
+        try {
+            gm = gridMemberService.login(txt_id.getText(), txt_password.getText());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         if(gm!=null){
             NepgAqiConfirmViewController.gridMember = gm;
             JavafxUtil.showStage(NepgMain.class, "view/NepgAqiConfirmView.fxml", primaryStage, "东软环保公众监督平台-确认AQI反馈数据");

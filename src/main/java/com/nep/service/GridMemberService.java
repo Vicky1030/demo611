@@ -2,6 +2,8 @@ package com.nep.service;
 
 import com.nep.po.GridMember;
 
+import java.io.IOException;
+
 public interface GridMemberService {
     /**
      * 网格员登录
@@ -9,5 +11,5 @@ public interface GridMemberService {
      * @param password
      * @return
      */
-    public GridMember login(String loginCode, String password);
+    public GridMember login(String loginCode, String password) throws IOException;
 }

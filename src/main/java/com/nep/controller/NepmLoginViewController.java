@@ -36,7 +36,7 @@ public class NepmLoginViewController {
     }
 
     public void login(){
-        int id = Integer.parseInt(txt_id.getText());
+        String id = txt_id.getText();
         String password = txt_password.getText();
 
         boolean isLogin = adminService.login(id, password);

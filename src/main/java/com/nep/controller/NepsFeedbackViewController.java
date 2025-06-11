@@ -18,6 +18,7 @@ import com.nep.NepsMain;
 
 import com.nep.util.FileUtil;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -93,7 +94,12 @@ public class NepsFeedbackViewController implements Initializable {
         ObservableList<AqiFeedback> data = FXCollections.observableArrayList();
         String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
 
-        List<AqiFeedback> afList = (List<AqiFeedback>) JsonUtil.readListFromJson(ProPaht+"aqi_feedback.json",new TypeReference<List<AqiFeedback>>() {});
+        List<AqiFeedback> afList = null;
+        try {
+            afList = (List<AqiFeedback>) JsonUtil.readListFromJson(ProPaht+"aqi_feedback.json",new TypeReference<List<AqiFeedback>>() {});
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         System.out.println("afList"+afList);
         for(int i = afList.size()-1;i>=0 ;i--){			//按照时间排序,有近到远
             AqiFeedback afb = afList.get(i);

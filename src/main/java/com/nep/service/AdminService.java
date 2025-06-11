@@ -8,5 +8,5 @@ public interface AdminService {
      * @param password
      * @return
      */
-    public boolean login(int loginCode,String password);
+    public boolean login(String loginCode, String password);
 }

@@ -3,6 +3,8 @@ package com.nep.service;
 
 import com.nep.po.Supervisor;
 
+import java.io.IOException;
+
 public interface SupervisorService {
     /**
      * 公众监督员登录功能
@@ -15,6 +17,6 @@ public interface SupervisorService {
      * @param supervisor
      * @return
      */
-    public boolean register(Supervisor supervisor);
+    public boolean register(Supervisor supervisor) throws IOException;
 
 }

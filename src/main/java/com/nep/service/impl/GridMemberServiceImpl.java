@@ -8,11 +8,12 @@ import com.nep.util.FileUtil;
 import com.nep.service.GridMemberService;
 import com.nep.util.JsonUtil;
 
+import java.io.IOException;
 import java.util.List;
 
 public class GridMemberServiceImpl implements GridMemberService {
     @Override
-    public GridMember login(String loginCode, String password) {
+    public GridMember login(String loginCode, String password) throws IOException {
         String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
 
         List<GridMember> glist = (List<GridMember>) JsonUtil.readListFromJson("/NepDatas/JSONData/grid_member.json",new TypeReference<List<GridMember>>() {});

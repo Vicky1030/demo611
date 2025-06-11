@@ -17,6 +17,8 @@ import com.nep.util.FileUtil;
 import com.nep.service.AqiFeedbackService;
 import com.nep.service.impl.AqiFeedbackServiceImpl;
 import com.nep.util.CommonUtil;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,7 +110,12 @@ public class NepsSelectAqiViewController implements Initializable {
         ObservableList<Aqi> data = FXCollections.observableArrayList();
         String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
 
-        List<Aqi> alist = (List<Aqi>)JsonUtil.readListFromJson("NepDatas/JSONData/aqi.json", new TypeReference<List<Aqi>>() {});
+        List<Aqi> alist = null;
+        try {
+            alist = (List<Aqi>) JsonUtil.readListFromJson("NepDatas/JSONData/aqi.json", new TypeReference<List<Aqi>>() {});
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         for(Aqi aqi:alist){
             data.add(aqi);
         }
@@ -120,21 +127,27 @@ public class NepsSelectAqiViewController implements Initializable {
         txt_level.setValue("预估AQI等级");
 
         //初始化省市区域
-        List<GridCity> plist = (List<GridCity>) JsonUtil.readListFromJson("NepDatas/JSONData/grid_city.json",new TypeReference<List<GridCity>>() {});
+        List<GridCity> plist = null;
+        try {
+            plist = (List<GridCity>) JsonUtil.readListFromJson("NepDatas/JSONData/grid_city.json",new TypeReference<List<GridCity>>() {});
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         for(GridCity province:plist){
             txt_province.getItems().add(province.getProvinceName());
         }
         txt_province.setValue("请选择省区域");
         txt_city.setValue("请选择市区域");
+        List<GridCity> finalPlist = plist;
         txt_province.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 txt_city.getItems().clear();  // 先清空
 
                 List<String> clist = new ArrayList<>();
-                for (int i = 0; i < plist.size(); i++) {
-                    if (plist.get(i).getProvinceName().equals(newValue)) {
-                        List<String> cityNames = plist.get(i).getCityNames();
+                for (int i = 0; i < finalPlist.size(); i++) {
+                    if (finalPlist.get(i).getProvinceName().equals(newValue)) {
+                        List<String> cityNames = finalPlist.get(i).getCityNames();
                         if (cityNames != null) {
                             clist = cityNames;
                         }

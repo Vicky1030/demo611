@@ -1,5 +1,7 @@
 package com.nep.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.*;
 import java.net.URL;
 
@@ -29,6 +31,13 @@ public class FileUtil {
             }
         }
         return object;
+    }
+    public static <T> T readJsonFile(String filePath, Class<T> clazz) throws IOException {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            return null;
+        }
+        return new ObjectMapper().readValue(file, clazz);
     }
 
     public static void writeObjectFromClasspath(String filePath, Object object) throws IOException {
