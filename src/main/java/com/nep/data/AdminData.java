@@ -25,9 +25,12 @@ public class AdminData {
         alist.add(a2);
 
         try {
-            FileUtil.writeObjectFromClasspath("NepDatas/JSONData/admin.json", alist);
+            FileUtil.writeObjectFromClasspath("NepDatas/JSONData/admins.json", alist);
+            System.out.println("数据写入成功");
         } catch (Exception e) {
+            System.err.println("数据写入失败: " + e.getMessage());
             e.printStackTrace();
         }
     }
-}
+    }
+
