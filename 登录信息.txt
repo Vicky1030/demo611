@@ -1,0 +1,18 @@
+[
+GridMember [gmTel=13888888888, state=工作中, getLoginCode()=2024001, getPassword()=111, getRealName()=郭晓川], 
+GridMember [gmTel=13555555555, state=工作中, getLoginCode()=2024002, getPassword()=222, getRealName()=韩德君], 
+GridMember [gmTel=13444444444, state=工作中, getLoginCode()=2024003, getPassword()=333, getRealName()=李晓旭], 
+GridMember [gmTel=13222222222, state=休假中, getLoginCode()=2024004, getPassword()=444, getRealName()=赵继伟], 
+GridMember [gmTel=13666666666, state=工作中, getLoginCode()=2024005, getPassword()=555, getRealName()=易建联]
+]
+
+[
+Supervisor [sex=女, getLoginCode()=13812345678, getPassword()=123, getRealName()=张三, getClass()=class com.nep.entity.Supervisor, hashCode()=1313953385, toString()=com.nep.entity.Supervisor@4e515669], 
+Supervisor [sex=女, getLoginCode()=13811111111, getPassword()=222, getRealName()=李四, getClass()=class com.nep.entity.Supervisor, hashCode()=399573350, toString()=com.nep.entity.Supervisor@17d10166], 
+Supervisor [sex=女, getLoginCode()=13812341234, getPassword()=123, getRealName()=朱家豪, getClass()=class com.nep.entity.Supervisor, hashCode()=463345942, toString()=com.nep.entity.Supervisor@1b9e1916]
+]
+
+[
+Admin [getLoginCode()=1001, getPassword()=111, getRealName()=赵本山, getClass()=class com.nep.entity.Admin, hashCode()=195600860, toString()=com.nep.entity.Admin@ba8a1dc], 
+Admin [getLoginCode()=1002, getPassword()=222, getRealName()=刘德华, getClass()=class com.nep.entity.Admin, hashCode()=1334729950, toString()=com.nep.entity.Admin@4f8e5cde]
+]
