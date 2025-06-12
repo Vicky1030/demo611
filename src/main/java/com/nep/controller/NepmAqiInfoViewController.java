@@ -1,6 +1,9 @@
 package com.nep.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.nep.po.AqiFeedback;
+import com.nep.po.Supervisor;
+import com.nep.util.JsonUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -53,17 +56,17 @@ public class NepmAqiInfoViewController implements Initializable {
         TableColumn<AqiFeedback, String> estimateGradeColumn = new TableColumn<>("预估等级");
         estimateGradeColumn.setMinWidth(60);
         estimateGradeColumn.setStyle("-fx-alignment: center;");	//居中
-        estimateGradeColumn.setCellValueFactory(new PropertyValueFactory<>("estimateGrade"));
+        estimateGradeColumn.setCellValueFactory(new PropertyValueFactory<>("estimatedGrade"));
 
         TableColumn<AqiFeedback, String> dateColumn = new TableColumn<>("反馈时间");
         dateColumn.setMinWidth(80);
         dateColumn.setStyle("-fx-alignment: center;");	//居中
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("afDate"));
 
         TableColumn<AqiFeedback, String> afNameColumn = new TableColumn<>("反馈者");
         afNameColumn.setMinWidth(60);
         afNameColumn.setStyle("-fx-alignment: center;");	//居中
-        afNameColumn.setCellValueFactory(new PropertyValueFactory<>("afName"));
+        afNameColumn.setCellValueFactory(new PropertyValueFactory<>("afname"));
 
         TableColumn<AqiFeedback, String> infoColumn = new TableColumn<>("反馈信息");
         infoColumn.setMinWidth(210);
@@ -76,13 +79,14 @@ public class NepmAqiInfoViewController implements Initializable {
 
         try {
             // 使用资源路径而非绝对路径
-            List<AqiFeedback> afList = (List<AqiFeedback>) FileUtil.readObject(
-                    "NepDatas/ObjectData/aqifeedback.txt");
+            List<AqiFeedback> afList = (List<AqiFeedback>) JsonUtil.readListFromFileSystem(
+                    "NepDatas/JSONData/aqi_feedback.json",
+                    new TypeReference<List<AqiFeedback>>() {});
 
             // 检查afList是否为null
             if (afList != null) {
                 for (AqiFeedback afb : afList) {
-                    if ("未指派".equals(afb.getState())) { // 避免NPE的字符串比较方式
+                    if (Integer.valueOf(1).equals(afb.getState())) {
                         data.add(afb);
                     }
                 }
