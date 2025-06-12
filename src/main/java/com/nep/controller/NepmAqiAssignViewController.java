@@ -99,7 +99,7 @@ public class NepmAqiAssignViewController implements Initializable {
 
     public void queryFeedback() {
         String afId = txt_afId.getText();
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("NepDatas/JSONData/aqi_feedback.aqi")) {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("NepDatas/JSONData/aqi_feedback.json")) {
             if (inputStream != null) {
                 List<AqiFeedback> alist = JsonUtil.readListFromJson(inputStream, new TypeReference<List<AqiFeedback>>() {});
                 boolean flag = true;
@@ -120,12 +120,13 @@ public class NepmAqiAssignViewController implements Initializable {
                         break;
                     }
                 }
+
                 if (flag) {
                     JavafxUtil.showAlert(aqiInfoStage, "查询失败", "未找到当前编号反馈信息", "请重新输入AQI反馈数据编号", "warn");
                     initConroller();
                 }
             } else {
-                System.err.println("未找到资源文件: NepDatas/JSONData/aqi_feedback.aqi");
+                System.err.println("未找到资源文件: NepDatas/JSONData/aqi_feedback.json");
             }
         } catch (Exception e) {
             e.printStackTrace();
