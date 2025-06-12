@@ -71,20 +71,7 @@ public class Aqi implements Serializable {
 				+ spmMax + ", remarks=" + remarks + "]";
 	}
 
-	// 对应level属性
-	public String getLevel() {
-		return String.valueOf(this.aqiId); // 或返回实际level字段
-	}
 
-	// 对应explain属性
-	public String getExplain() {
-		return this.aqiExplain; // 或返回实际explain字段
-	}
-
-	// 对应impact属性
-	public String getImpact() {
-		return this.healthImpact; // 或返回实际impact字段
-	}
 	public void setAqiId(int aqiId) {
 		this.aqiId = aqiId;
 	}

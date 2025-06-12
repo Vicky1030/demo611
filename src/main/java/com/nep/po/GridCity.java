@@ -30,7 +30,6 @@ public class GridCity implements Serializable {
         this.cityId = cityId;
         this.cityName = cityName;
         this.provinceId = provinceId;
-        this.provinceName = provinceName;
         this.remarks = remarks;
     }
 
@@ -60,8 +59,8 @@ public class GridCity implements Serializable {
     public void setProvinceId(Integer provinceId) {
         this.provinceId = provinceId;
     }
-    public List<String> getCityNames() {  // 修改方法名和返回类型
-        return cityNames;
+    public String getCityName() {  // 修改方法名和返回类型
+        return cityName;
     }
     public String getRemarks() {
         return remarks;

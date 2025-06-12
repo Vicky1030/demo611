@@ -18,7 +18,7 @@ public class JsonUtil {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    public static <T> List<T> readListFromJson(String resourcePath, TypeReference<List<T>> typeRef) throws IOException {
+    public static <T> List<T> readListfromJson(String resourcePath, TypeReference<List<T>> typeRef) throws IOException {
         // 修正路径格式 - 移除开头的斜杠（如果有）
         if (resourcePath.startsWith("/")) {
             resourcePath = resourcePath.substring(1);

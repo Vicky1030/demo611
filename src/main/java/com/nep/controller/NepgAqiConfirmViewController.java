@@ -262,7 +262,7 @@ public class NepgAqiConfirmViewController implements Initializable {
         String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
         List<AqiFeedback> aList = null;
         try {
-            aList = (List<AqiFeedback>) JsonUtil.readListFromJson(ProPaht+"aqi_feedback.txt",new TypeReference<List<AqiFeedback>>() {});
+            aList = (List<AqiFeedback>) JsonUtil.readListfromJson(ProPaht+"aqi_feedback.txt",new TypeReference<List<AqiFeedback>>() {});
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

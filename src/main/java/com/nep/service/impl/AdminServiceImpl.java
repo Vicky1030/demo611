@@ -15,7 +15,7 @@ public class AdminServiceImpl implements AdminService {
         String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
         List<Admin> alist = null;
         try {
-            alist = (List<Admin>) JsonUtil.readListFromJson("/NepDatas/JSONData/admins.json",new TypeReference<List<Admin>>() {});
+            alist = (List<Admin>) JsonUtil.readListfromJson("/NepDatas/JSONData/admins.json",new TypeReference<List<Admin>>() {});
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -24,7 +24,7 @@ private static final Logger logger = LoggerFactory.getLogger(AqiFeedbackServiceI
         @Override
         public boolean saveFeedBack(AqiFeedback af) {
             try {
-                List<AqiFeedback> afList = JsonUtil.readListFromJson(
+                List<AqiFeedback> afList = JsonUtil.readListfromJson(
                         FEEDBACK_FILE_PATH,
                         new TypeReference<List<AqiFeedback>>() {}
                 );
@@ -67,7 +67,7 @@ private static final Logger logger = LoggerFactory.getLogger(AqiFeedbackServiceI
         String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
         List<AqiFeedback> afList = null;
         try {
-            afList = (List<AqiFeedback>) JsonUtil.readListFromJson("/NepDatas/JSONData/aqi_feedback.json",new TypeReference<List<AqiFeedback>>() {});
+            afList = (List<AqiFeedback>) JsonUtil.readListfromJson("/NepDatas/JSONData/aqi_feedback.json",new TypeReference<List<AqiFeedback>>() {});
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

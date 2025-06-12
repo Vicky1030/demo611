@@ -33,7 +33,7 @@ public class SupervisorServiceImpl implements SupervisorService {
         System.out.println("要读取的文件路径: " + ProPaht + "supervisor.json");
         List<Supervisor> slist = null;
         try {
-            slist = JsonUtil.readListFromJson(
+            slist = JsonUtil.readListfromJson(
                     "NepDatas/JSONData/supervisor.json",
                     new TypeReference<List<Supervisor>>() {}
             );
@@ -79,7 +79,7 @@ public class SupervisorServiceImpl implements SupervisorService {
         // 读取现有数据
         List<Supervisor> supervisorList;
         try {
-            supervisorList = JsonUtil.readListFromJson(
+            supervisorList = JsonUtil.readListfromJson(
                     filePath.toString(),
                     new TypeReference<List<Supervisor>>() {}
             );

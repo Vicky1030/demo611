@@ -20,9 +20,7 @@ import com.nep.util.CommonUtil;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.io.InputStream;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
@@ -96,15 +94,15 @@ public class NepsSelectAqiViewController implements Initializable {
         //初始化表格
         TableColumn<Aqi, String> levelColumn = new TableColumn<>("级别");
         levelColumn.setMinWidth(80);
-        levelColumn.setCellValueFactory(new PropertyValueFactory<>("level"));
+        levelColumn.setCellValueFactory(new PropertyValueFactory<>("chineseExplain"));
 
         TableColumn<Aqi, String> explainColumn = new TableColumn<>("说明");
         explainColumn.setMinWidth(80);
-        explainColumn.setCellValueFactory(new PropertyValueFactory<>("explain"));
+        explainColumn.setCellValueFactory(new PropertyValueFactory<>("aqiExplain"));
 
         TableColumn<Aqi, String> impactColumn = new TableColumn<>("对健康影响");
         impactColumn.setMinWidth(425);
-        impactColumn.setCellValueFactory(new PropertyValueFactory<>("impact"));
+        impactColumn.setCellValueFactory(new PropertyValueFactory<>("healthImpact"));
 
         txt_tableView.getColumns().addAll(levelColumn, explainColumn,impactColumn);
         ObservableList<Aqi> data = FXCollections.observableArrayList();
@@ -112,7 +110,7 @@ public class NepsSelectAqiViewController implements Initializable {
 
         List<Aqi> alist = null;
         try {
-            alist = (List<Aqi>) JsonUtil.readListFromJson("NepDatas/JSONData/aqi.json", new TypeReference<List<Aqi>>() {});
+            alist = (List<Aqi>) JsonUtil.readListfromJson("NepDatas/JSONData/aqi.json", new TypeReference<List<Aqi>>() {});
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -122,45 +120,64 @@ public class NepsSelectAqiViewController implements Initializable {
         txt_tableView.setItems(data);
         //初始化AQI等级下拉列表
         for(Aqi aqi:alist){
-            txt_level.getItems().add(String.valueOf(aqi.getAqiId()));
+            txt_level.getItems().add(String.valueOf(aqi.getChineseExplain()));
         }
         txt_level.setValue("预估AQI等级");
 
-        //初始化省市区域
-        List<GridCity> plist = null;
+        List<GridProvince> provinces = new ArrayList<>();
+        List<GridCity> cities = new ArrayList<>();
         try {
-            plist = (List<GridCity>) JsonUtil.readListFromJson("NepDatas/JSONData/grid_city.json",new TypeReference<List<GridCity>>() {});
+            provinces = JsonUtil.readListfromJson(
+                    "NepDatas/JSONData/grid_province.json", new TypeReference<List<GridProvince>>() {});
+            cities = JsonUtil.readListfromJson(
+                    "NepDatas/JSONData/grid_city.json", new TypeReference<List<GridCity>>() {});
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace(); // 你可以替换为日志打印或用户提示
+            return; // 读取失败时直接退出，防止空指针
         }
-        for(GridCity province:plist){
-            txt_province.getItems().add(province.getProvinceName());
+
+
+// 2. 构建映射：省份名称 → ID，省份ID → 城市列表
+        Map<String, Integer> provinceNameToId = new HashMap<>();
+        Map<Integer, List<String>> provinceIdToCityNames = new HashMap<>();
+
+        for (GridProvince province : provinces) {
+            String pname = province.getProvinceName();
+            int pid = province.getProvinceId();
+            provinceNameToId.put(pname, pid);
+            txt_province.getItems().add(pname); // 添加到省份下拉框
         }
+
+        for (GridCity city : cities) {
+            int pid = city.getProvinceId();
+            String cname = city.getCityName();
+            provinceIdToCityNames.computeIfAbsent(pid, k -> new ArrayList<>()).add(cname);
+        }
+
+// 3. 设置默认值
         txt_province.setValue("请选择省区域");
         txt_city.setValue("请选择市区域");
-        List<GridCity> finalPlist = plist;
-        txt_province.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                txt_city.getItems().clear();  // 先清空
 
-                List<String> clist = new ArrayList<>();
-                for (int i = 0; i < finalPlist.size(); i++) {
-                    if (finalPlist.get(i).getProvinceName().equals(newValue)) {
-                        List<String> cityNames = finalPlist.get(i).getCityNames();
-                        if (cityNames != null) {
-                            clist = cityNames;
-                        }
-                        break; // 找到对应省后可以退出循环
-                    }
-                }
+// 4. 添加监听器：省份选择联动城市
+        txt_province.valueProperty().addListener((obs, oldVal, newVal) -> {
+            txt_city.getItems().clear();
 
-                for (String cityName : clist) {
-                    txt_city.getItems().add(cityName);
-                }
+            if (newVal == null || newVal.equals("请选择省区域")) {
                 txt_city.setValue("请选择市区域");
+                return;
             }
+
+            Integer pid = provinceNameToId.get(newVal);
+            if (pid != null) {
+                List<String> cityList = provinceIdToCityNames.get(pid);
+                if (cityList != null) {
+                    txt_city.getItems().addAll(cityList);
+                }
+            }
+
+            txt_city.setValue("请选择市区域");
         });
+
 
 
 

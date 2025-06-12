@@ -16,7 +16,7 @@ public class GridMemberServiceImpl implements GridMemberService {
     public GridMember login(String loginCode, String password) throws IOException {
         String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
 
-        List<GridMember> glist = (List<GridMember>) JsonUtil.readListFromJson("/NepDatas/JSONData/grid_member.json",new TypeReference<List<GridMember>>() {});
+        List<GridMember> glist = (List<GridMember>) JsonUtil.readListfromJson("/NepDatas/JSONData/grid_member.json",new TypeReference<List<GridMember>>() {});
         for(GridMember gm : glist){
             if(gm.getGmCode().equals(loginCode) && gm.getPassword().equals(password)){
                 return gm;

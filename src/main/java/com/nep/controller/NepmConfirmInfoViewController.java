@@ -96,7 +96,7 @@ public class NepmConfirmInfoViewController implements Initializable {
 
         List<AqiFeedback> afList = null;
         try {
-            afList = (List<AqiFeedback>) JsonUtil.readListFromJson(ProPaht+"aqi_feedback.json",new TypeReference<List<AqiFeedback>>() {});
+            afList = (List<AqiFeedback>) JsonUtil.readListfromJson(ProPaht+"aqi_feedback.json",new TypeReference<List<AqiFeedback>>() {});
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
