@@ -19,30 +19,30 @@ public class AqiFeedbackServiceImpl implements AqiFeedbackService {
 // 在当前类中定义自己的logger
 private static final Logger logger = LoggerFactory.getLogger(AqiFeedbackServiceImpl.class);
 
-        private static final String FEEDBACK_FILE_PATH = "src/main/resources/NepDatas/JSONData/aqi_feedback.json";
+    private static final String FEEDBACK_FILE_PATH = "D:/neusoft/demo611/demo611/NepDatas/JSONData/aqi_feedback.json";
 
-        @Override
-        public boolean saveFeedBack(AqiFeedback af) {
-            try {
-                List<AqiFeedback> afList = JsonUtil.readListfromJson(
-                        FEEDBACK_FILE_PATH,
-                        new TypeReference<List<AqiFeedback>>() {}
-                );
 
-                if (afList == null) {
-                    afList = new ArrayList<>();
-                }
+    @Override
+    public boolean saveFeedBack(AqiFeedback af) {
+        try {
+            List<AqiFeedback> afList = JsonUtil.readListFromFileSystem(
+                    FEEDBACK_FILE_PATH,
+                    new TypeReference<List<AqiFeedback>>() {}
+            );
 
-                afList.add(af);
-                JsonUtil.writeListToJson(afList, FEEDBACK_FILE_PATH);
-
-                return true;
-            } catch (IOException e) {
-                // 使用当前类的logger
-                logger.error("保存AQI反馈失败", e);
-                return false;
+            if (afList == null) {
+                afList = new ArrayList<>();
             }
+
+            afList.add(af);
+            JsonUtil.writeListToJson(afList, FEEDBACK_FILE_PATH);
+
+            return true;
+        } catch (IOException e) {
+            logger.error("保存AQI反馈失败", e);
+            return false;
         }
+    }
 
     @Override
     public void assignGridMember(String afId,String realName) {

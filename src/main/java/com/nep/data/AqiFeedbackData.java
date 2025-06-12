@@ -14,7 +14,7 @@ public class AqiFeedbackData {
         List<AqiFeedback> afList = new ArrayList<AqiFeedback>();
 
         String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
-        FileUtil.writeObject(ProPaht+"aqifeedback.json", afList);
+        FileUtil.writeObject(ProPaht+"aqi_feedback.json", afList);
 
     }
 }

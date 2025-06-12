@@ -79,16 +79,16 @@ public class NepsFeedbackViewController implements Initializable {
         TableColumn<AqiFeedback, String> estimateGradeColumn = new TableColumn<>("预估等级");
         estimateGradeColumn.setMinWidth(60);
         estimateGradeColumn.setStyle("-fx-alignment: center;");	//居中
-        estimateGradeColumn.setCellValueFactory(new PropertyValueFactory<>("estimateGrade"));
+        estimateGradeColumn.setCellValueFactory(new PropertyValueFactory<>("estimatedGrade"));
 
         TableColumn<AqiFeedback, String> dateColumn = new TableColumn<>("反馈时间");
         dateColumn.setMinWidth(80);
         dateColumn.setStyle("-fx-alignment: center;");	//居中
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("af_date"));
 
         TableColumn<AqiFeedback, String> infoColumn = new TableColumn<>("反馈信息");
         infoColumn.setMinWidth(330);
-        infoColumn.setCellValueFactory(new PropertyValueFactory<>("infomation"));
+        infoColumn.setCellValueFactory(new PropertyValueFactory<>("information"));
 
         txt_tableView.getColumns().addAll(afIdColumn, proviceNameColumn,cityNameColumn,estimateGradeColumn,dateColumn,infoColumn);
         ObservableList<AqiFeedback> data = FXCollections.observableArrayList();
@@ -96,14 +96,16 @@ public class NepsFeedbackViewController implements Initializable {
 
         List<AqiFeedback> afList = null;
         try {
-            afList = (List<AqiFeedback>) JsonUtil.readListfromJson(ProPaht+"aqi_feedback.json",new TypeReference<List<AqiFeedback>>() {});
+            afList = JsonUtil.readListFromFileSystem("D:/neusoft/demo611/demo611/NepDatas/JSONData/aqi_feedback.json",new TypeReference<List<AqiFeedback>>() {} );
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         System.out.println("afList"+afList);
         for(int i = afList.size()-1;i>=0 ;i--){			//按照时间排序,有近到远
             AqiFeedback afb = afList.get(i);
-            if(afb.getAfname().equals(supervisor.getRealName())){
+            if (afb.getAfname() != null && afb.getAfname().equals(supervisor.getRealName()))
+            {
                 data.add(afb);
             }
         }

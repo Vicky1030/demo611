@@ -51,6 +51,7 @@ public class NepsSelectAqiViewController implements Initializable {
     //多态
     private AqiFeedbackService aqiFeedbackService = new AqiFeedbackServiceImpl();
 
+
     public TableView<Aqi> getTxt_tableView() {
         return txt_tableView;
     }
@@ -89,6 +90,8 @@ public class NepsSelectAqiViewController implements Initializable {
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+
         // TODO Auto-generated method stub
         label_realName.setText(supervisor.getRealName());
         //初始化表格
@@ -189,7 +192,7 @@ public class NepsSelectAqiViewController implements Initializable {
         afb.setAfname(supervisor.getRealName());
         afb.setProvinceName(txt_province.getValue());
         afb.setCityName(txt_city.getValue());
-        afb.setEstimatedGrade(Integer.valueOf(txt_level.getValue()));
+        afb.setEstimatedGrade(txt_level.getValue());
         afb.setInformation(txt_information.getText());
         afb.setAfDate(CommonUtil.currentDate());
         afb.setState(0);

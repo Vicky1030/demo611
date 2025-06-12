@@ -5,6 +5,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import javafx.util.converter.IntegerStringConverter;
 
 public class AqiFeedback implements Serializable {
 
@@ -34,7 +35,7 @@ public class AqiFeedback implements Serializable {
     private String gmname;
 
     @JsonProperty("estimated_grade")
-    private Integer estimatedGrade;
+    private String estimatedGrade;
 
     @JsonProperty("af_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
@@ -70,7 +71,7 @@ public class AqiFeedback implements Serializable {
     public AqiFeedback() {
     }
 
-    public AqiFeedback(Integer afId, String telId, String afname,Integer provinceId, Integer cityId, String address, String information, Integer estimatedGrade, Date afDate, Date afTime, Integer gmId, Date assignDate, Date assignTime, Integer state, String remarks,String gmname) {
+    public AqiFeedback(Integer afId, String telId, String afname, Integer provinceId, Integer cityId, String address, String information, String estimatedGrade, Date afDate, Date afTime, Integer gmId, Date assignDate, Date assignTime, Integer state, String remarks, String gmname) {
         this.afId = afId;
         this.telId = telId;
         this.afname = afname;
@@ -161,11 +162,11 @@ public class AqiFeedback implements Serializable {
         this.information = information;
     }
 
-    public Integer getEstimatedGrade() {
+    public String getEstimatedGrade() {
         return estimatedGrade;
     }
 
-    public void setEstimatedGrade(Integer estimatedGrade) {
+    public void setEstimatedGrade(String estimatedGrade) {
         this.estimatedGrade = estimatedGrade;
     }
 
