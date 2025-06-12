@@ -57,7 +57,7 @@ public class NepmAqiAssignViewController implements Initializable {
     private AqiFeedbackService aqiFeedbackService = new AqiFeedbackServiceImpl();
 
     // 维护名字到ID的映射
-    private Map<String, String> nameToIdMap = new HashMap<>();
+    private Map<String, Integer> nameToIdMap = new HashMap<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -72,9 +72,9 @@ public class NepmAqiAssignViewController implements Initializable {
         try (InputStream inputStream = new FileInputStream("D:/neusoft/demo611/demo611/NepDatas/JSONData/grid_member.json")) {
             List<GridMember> glist = JsonUtil.readListFromJson(inputStream, new TypeReference<List<GridMember>>() {});
             for (GridMember gm : glist) {
-                if (gm.getState() == 0) { // 可用网格员
+                if (gm.getState()==0) { // 可用网格员
                     combo_realName.getItems().add(gm.getGmName());
-                    nameToIdMap.put(gm.getGmName(), gm.getGmId().toString());
+                    nameToIdMap.put(gm.getGmName(), gm.getGmId());
                 }
             }
         } catch (Exception e) {
@@ -87,8 +87,8 @@ public class NepmAqiAssignViewController implements Initializable {
         String afId = txt_afId.getText();
         String filePath = "D:/neusoft/demo611/demo611/NepDatas/JSONData/aqi_feedback.json";
 
-        try (InputStream inputStream = new FileInputStream(filePath)) {
-            List<AqiFeedback> alist = JsonUtil.readListFromJson(inputStream, new TypeReference<List<AqiFeedback>>() {});
+        try {
+            List<AqiFeedback> alist = JsonUtil.readListFromFileSystem(filePath, new TypeReference<List<AqiFeedback>>() {});
 
             boolean found = false;
             for (AqiFeedback af : alist) {
@@ -131,14 +131,14 @@ public class NepmAqiAssignViewController implements Initializable {
         }
         String afId = label_afId.getText();
         String selectedName = combo_realName.getValue();
-        String selectedId = nameToIdMap.get(selectedName);
+        Integer selectedId = nameToIdMap.get(selectedName);
         if(selectedId == null){
             JavafxUtil.showAlert(aqiInfoStage, "指派失败", "未找到对应网格员ID", "请选择有效的网格员","warn");
             return;
         }
 
         // 传ID给业务层
-        aqiFeedbackService.assignGridMember(afId, selectedId);
+        aqiFeedbackService.assignGridMember(afId, String.valueOf(selectedId));
         JavafxUtil.showAlert(aqiInfoStage, "指派成功", "AQI反馈信息指派成功!", "请等待网格员实测数据信息","info");
         initConroller();
     }

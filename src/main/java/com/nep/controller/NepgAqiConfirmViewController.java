@@ -137,7 +137,7 @@ public class NepgAqiConfirmViewController implements Initializable {
             afist = (List<AqiFeedback>) JsonUtil.readListFromFileSystem(ProPaht + "aqi_feedback.json", new TypeReference<List<AqiFeedback>>() {});
             for (AqiFeedback afb : afist) {
                 if (afb.getGmId() != null &&
-                        afb.getGmId().equals(String.valueOf(gridMember.getGmId())) &&  // 🔄 强制转字符串比对
+                        afb.getGmId().equals(gridMember.getGmId()) &&
                         afb.getState().equals(2)) {
                     data.add(afb);
                 }
