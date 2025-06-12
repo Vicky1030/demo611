@@ -58,8 +58,8 @@ public class NepsRegisterViewController {
         if (flag) {
             JavafxUtil.showAlert(primaryStage, "注册成功", txt_id.getText() + " 账号注册成功!", "可以进行用户登录!", "info");
             // 注册成功后，更新内存中的用户列表
-            List<Supervisor> slist = JsonUtil.readListfromJson(
-                    System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/supervisor.json",
+            List<Supervisor> slist = JsonUtil.readListFromFileSystem(
+                    System.getProperty("user.dir") + "D:/neusoft/demo611/demo611/NepDatas/JSONData/supervisor.json",
                     new TypeReference<List<Supervisor>>() {}
             );
             // 确保slist是支持修改操作的列表

@@ -84,7 +84,7 @@ public class NepsFeedbackViewController implements Initializable {
         TableColumn<AqiFeedback, String> dateColumn = new TableColumn<>("反馈时间");
         dateColumn.setMinWidth(80);
         dateColumn.setStyle("-fx-alignment: center;");	//居中
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("af_date"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("afDate"));
 
         TableColumn<AqiFeedback, String> infoColumn = new TableColumn<>("反馈信息");
         infoColumn.setMinWidth(330);
