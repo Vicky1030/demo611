@@ -96,12 +96,12 @@ public class NepsFeedbackViewController implements Initializable {
 
         List<AqiFeedback> afList = null;
         try {
-            afList = JsonUtil.readListFromFileSystem("D:/neusoft/demo611/demo611/NepDatas/JSONData/aqi_feedback.json",new TypeReference<List<AqiFeedback>>() {} );
-
+            // 修改文件路径
+            afList = JsonUtil.readListFromFileSystem(ProPaht + "aqi_feedback.json", new TypeReference<List<AqiFeedback>>() {});
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("afList"+afList);
+        System.out.println("afList" + afList);
         for(int i = afList.size()-1;i>=0 ;i--){			//按照时间排序,有近到远
             AqiFeedback afb = afList.get(i);
             if (afb.getAfname() != null && afb.getAfname().equals(supervisor.getRealName()))
@@ -112,4 +112,3 @@ public class NepsFeedbackViewController implements Initializable {
         txt_tableView.setItems(data);
     }
 }
-

@@ -16,10 +16,11 @@ import java.util.List;
 public class AqiFeedbackServiceImpl implements AqiFeedbackService {
 
 
-// 在当前类中定义自己的logger
-private static final Logger logger = LoggerFactory.getLogger(AqiFeedbackServiceImpl.class);
+    // 在当前类中定义自己的logger
+    private static final Logger logger = LoggerFactory.getLogger(AqiFeedbackServiceImpl.class);
 
-    private static final String FEEDBACK_FILE_PATH = "D:/neusoft/demo611/demo611/NepDatas/JSONData/aqi_feedback.json";
+    // 修改文件路径
+    private static final String FEEDBACK_FILE_PATH = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/aqi_feedback.json";
 
 
     @Override
@@ -67,7 +68,7 @@ private static final Logger logger = LoggerFactory.getLogger(AqiFeedbackServiceI
         String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
         List<AqiFeedback> afList = null;
         try {
-            afList = (List<AqiFeedback>) JsonUtil.readListfromJson("/NepDatas/JSONData/aqi_feedback.json",new TypeReference<List<AqiFeedback>>() {});
+            afList = (List<AqiFeedback>) JsonUtil.readListfromJson(ProPaht + "aqi_feedback.json",new TypeReference<List<AqiFeedback>>() {});
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
