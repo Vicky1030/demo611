@@ -33,7 +33,7 @@ public class NepmConfirmInfoViewController implements Initializable {
         TableColumn<AqiFeedback, String> proviceNameColumn = new TableColumn<>("省区域");
         proviceNameColumn.setMinWidth(60);
         proviceNameColumn.setStyle("-fx-alignment: center;");	//居中
-        proviceNameColumn.setCellValueFactory(new PropertyValueFactory<>("proviceName"));
+        proviceNameColumn.setCellValueFactory(new PropertyValueFactory<>("provinceName"));
 
         TableColumn<AqiFeedback, String> cityNameColumn = new TableColumn<>("市区域");
         cityNameColumn.setMinWidth(60);
@@ -43,17 +43,17 @@ public class NepmConfirmInfoViewController implements Initializable {
         TableColumn<AqiFeedback, String> estimateGradeColumn = new TableColumn<>("预估等级");
         estimateGradeColumn.setMinWidth(60);
         estimateGradeColumn.setStyle("-fx-alignment: center;");	//居中
-        estimateGradeColumn.setCellValueFactory(new PropertyValueFactory<>("estimateGrade"));
+        estimateGradeColumn.setCellValueFactory(new PropertyValueFactory<>("estimatedGrade"));
 
         TableColumn<AqiFeedback, String> dateColumn = new TableColumn<>("反馈时间");
         dateColumn.setMinWidth(80);
         dateColumn.setStyle("-fx-alignment: center;");	//居中
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("afDate"));
 
         TableColumn<AqiFeedback, String> afNameColumn = new TableColumn<>("反馈者");
         afNameColumn.setMinWidth(60);
         afNameColumn.setStyle("-fx-alignment: center;");	//居中
-        afNameColumn.setCellValueFactory(new PropertyValueFactory<>("afName"));
+        afNameColumn.setCellValueFactory(new PropertyValueFactory<>("afname"));
 
         TableColumn<AqiFeedback, String> so2Column = new TableColumn<>("SQ2浓度(ug/m3)");
         so2Column.setMinWidth(80);
@@ -92,18 +92,18 @@ public class NepmConfirmInfoViewController implements Initializable {
 
         txt_tableView.getColumns().addAll(afIdColumn, proviceNameColumn,cityNameColumn,estimateGradeColumn,dateColumn,afNameColumn,so2Column,coColumn,pmColumn,confirmLevelColumn,confirmExplainColumn,confirmDateColumn,gmNameColumn);
         ObservableList<AqiFeedback> data = FXCollections.observableArrayList();
-        String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
+        String ProPaht = System.getProperty("user.dir") + "/NepDatas/JSONData/";
 
         List<AqiFeedback> afList = null;
         try {
-            afList = (List<AqiFeedback>) JsonUtil.readListfromJson(ProPaht+"aqi_feedback.json",new TypeReference<List<AqiFeedback>>() {});
+            afList = (List<AqiFeedback>) JsonUtil.readListFromFileSystem(ProPaht+"aqi_feedback.json",new TypeReference<List<AqiFeedback>>() {});
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         for(AqiFeedback afb:afList){
-            if(afb.getState().equals(2)){
+
                 data.add(afb);
-            }
+
         }
         txt_tableView.setItems(data);
     }

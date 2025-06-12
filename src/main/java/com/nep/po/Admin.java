@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 public class Admin implements Serializable {
-    private static final long serialVersionUID = 568262933260141034L;
+    private static final long serialVersionUID = 1L;
 
 	@JsonProperty("admin_id")
 	private String adminId;

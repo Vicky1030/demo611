@@ -6,11 +6,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javafx.util.converter.IntegerStringConverter;
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AqiFeedback implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @JsonIgnoreProperties(ignoreUnknown = true)
+
     @JsonProperty("af_id")
     private Integer afId;
 
@@ -280,6 +280,6 @@ public class AqiFeedback implements Serializable {
     }
 
     public void setGmname(String realName) {
-        this.gmname = gmname;
+        this.gmname = realName;
     }
 }

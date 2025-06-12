@@ -101,7 +101,7 @@ public class NepgAqiConfirmViewController implements Initializable {
         TableColumn<AqiFeedback, String> proviceNameColumn = new TableColumn<>("省区域");
         proviceNameColumn.setMinWidth(60);
         proviceNameColumn.setStyle("-fx-alignment: center;");	//居中
-        proviceNameColumn.setCellValueFactory(new PropertyValueFactory<>("proviceName"));
+        proviceNameColumn.setCellValueFactory(new PropertyValueFactory<>("provinceName"));
 
         TableColumn<AqiFeedback, String> cityNameColumn = new TableColumn<>("市区域");
         cityNameColumn.setMinWidth(60);
@@ -111,60 +111,54 @@ public class NepgAqiConfirmViewController implements Initializable {
         TableColumn<AqiFeedback, String> estimateGradeColumn = new TableColumn<>("预估等级");
         estimateGradeColumn.setMinWidth(60);
         estimateGradeColumn.setStyle("-fx-alignment: center;");	//居中
-        estimateGradeColumn.setCellValueFactory(new PropertyValueFactory<>("estimateGrade"));
+        estimateGradeColumn.setCellValueFactory(new PropertyValueFactory<>("estimatedGrade"));
 
         TableColumn<AqiFeedback, String> dateColumn = new TableColumn<>("反馈时间");
         dateColumn.setMinWidth(80);
         dateColumn.setStyle("-fx-alignment: center;");	//居中
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("Afdate"));
 
         TableColumn<AqiFeedback, String> afNameColumn = new TableColumn<>("反馈者");
         afNameColumn.setMinWidth(60);
         afNameColumn.setStyle("-fx-alignment: center;");	//居中
-        afNameColumn.setCellValueFactory(new PropertyValueFactory<>("afName"));
+        afNameColumn.setCellValueFactory(new PropertyValueFactory<>("afname"));
 
         TableColumn<AqiFeedback, String> addressColumn = new TableColumn<>("具体地址");
         addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
 
         TableColumn<AqiFeedback, String> infoColumn = new TableColumn<>("反馈信息");
-        infoColumn.setCellValueFactory(new PropertyValueFactory<>("infomation"));
+        infoColumn.setCellValueFactory(new PropertyValueFactory<>("information"));
 
         txt_tableView.getColumns().addAll(afIdColumn,afNameColumn,dateColumn,estimateGradeColumn, proviceNameColumn,cityNameColumn,addressColumn,infoColumn);
         ObservableList<AqiFeedback> data = FXCollections.observableArrayList();
-        String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
-
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("NepDatas/JSONData/aqi_feedback.json")) {
-            if (inputStream != null) {
-                List<AqiFeedback> afList = JsonUtil.readListFromJson(inputStream, new TypeReference<List<AqiFeedback>>() {
-                });
-                for (AqiFeedback afb : afList) {
-                    if (afb.getGmId() != null && afb.getGmId().equals(gridMember.getGmId()) && afb.getState().equals(1)) {
-                        data.add(afb);
-                    }
+        String ProPaht = "D:/neusoft/demo611/demo611/NepDatas/JSONData/";
+        List<AqiFeedback> afist = null;
+        try {
+            afist = (List<AqiFeedback>) JsonUtil.readListFromFileSystem(ProPaht + "aqi_feedback.json", new TypeReference<List<AqiFeedback>>() {});
+            for (AqiFeedback afb : afist) {
+                if (afb.getGmId() != null &&
+                        afb.getGmId().equals(String.valueOf(gridMember.getGmId())) &&  // 🔄 强制转字符串比对
+                        afb.getState().equals(2)) {
+                    data.add(afb);
                 }
-                txt_tableView.setItems(data);
-            } else {
-                System.err.println("未找到资源文件: NepDatas/JSONData/aqi_feedback.json");
             }
-        } catch (Exception e) {
+            txt_tableView.setItems(data);
+        } catch (IOException e) {
             e.printStackTrace();
+            System.err.println("读取文件失败：" + ProPaht + "aqi_feedback.json");
         }
-        //添加编号文本框事件监听
+
         txt_afId.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-            if (!isNowFocused) {
+            if (!isNowFocused) { // 失去焦点时
                 boolean flag = true;
-                try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("NepDatas/JSONData/aqi_feedback.json")) {
-                    if (inputStream != null) {
-                        List<AqiFeedback> afList = JsonUtil.readListFromJson(inputStream, new TypeReference<List<AqiFeedback>>() {
-                        });
-                        for (AqiFeedback afb : afList) {
-                            if (afb.getGmId() != null && afb.getAfId().toString().equals(txt_afId.getText())) {
-                                flag = false;
-                                return;
-                            }
+                String path = System.getProperty("user.dir") + "/NepDatas/JSONData/aqi_feedback.json";
+                try {
+                    List<AqiFeedback> afList = JsonUtil.readListFromFileSystem(path, new TypeReference<List<AqiFeedback>>() {});
+                    for (AqiFeedback afb : afList) {
+                        if (afb.getGmId() != null && afb.getAfId().toString().equals(txt_afId.getText())) {
+                            flag = false;
+                            break;  // 找到匹配，结束循环
                         }
-                    } else {
-                        System.err.println("未找到资源文件: NepDatas/JSONData/aqi_feedback.json");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -175,6 +169,7 @@ public class NepgAqiConfirmViewController implements Initializable {
                 }
             }
         });
+
 
         txt_so2.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -217,6 +212,7 @@ public class NepgAqiConfirmViewController implements Initializable {
             }
 
         });
+
         txt_pm.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -244,7 +240,7 @@ public class NepgAqiConfirmViewController implements Initializable {
         AqiFeedback afb = new AqiFeedback();
         Statistics st = new Statistics();
         st.setFdId(txt_afId.getText());
-        afb.setState(Integer.valueOf("已实测"));
+        afb.setState(Integer.valueOf(0));
         st.setSo2Value(Integer.valueOf(txt_so2.getText()));
         st.setCoValue(Integer.valueOf(txt_co.getText()));
         st.setSpmValue(Integer.valueOf((txt_pm.getText())));
@@ -259,10 +255,10 @@ public class NepgAqiConfirmViewController implements Initializable {
         JavafxUtil.showAlert(primaryStage, "提交成功", "污染物实测数据提交成功", "","info");
         //刷新页面数据表格
         ObservableList<AqiFeedback> data = FXCollections.observableArrayList();
-        String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
+        String ProPaht = System.getProperty("user.dir") + "/NepDatas/JSONData/";
         List<AqiFeedback> aList = null;
         try {
-            aList = (List<AqiFeedback>) JsonUtil.readListfromJson(ProPaht+"aqi_feedback.txt",new TypeReference<List<AqiFeedback>>() {});
+            aList = (List<AqiFeedback>) JsonUtil.readListFromFileSystem(ProPaht+"aqi_feedback.json",new TypeReference<List<AqiFeedback>>() {});
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

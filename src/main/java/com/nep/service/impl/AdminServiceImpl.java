@@ -12,10 +12,11 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public boolean login(String loginCode, String password) {
         // TODO Auto-generated method stub
-        String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
+        String ProPaht = System.getProperty("user.dir") + "/NepDatas/JSONData/";
         List<Admin> alist = null;
         try {
-            alist = (List<Admin>) JsonUtil.readListfromJson("/NepDatas/JSONData/admins.json",new TypeReference<List<Admin>>() {});
+            String path = System.getProperty("user.dir") + "/NepDatas/JSONData/admins.json";
+            alist = JsonUtil.readListFromFileSystem(path, new TypeReference<List<Admin>>() {});
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

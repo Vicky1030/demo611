@@ -45,20 +45,35 @@ private static final Logger logger = LoggerFactory.getLogger(AqiFeedbackServiceI
     }
 
     @Override
-    public void assignGridMember(String afId,String realName) {
-        String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
+    public void assignGridMember(String afId, String realName) {
+        String ProPaht = System.getProperty("user.dir") + "/NepDatas/JSONData/";
 
-        List<AqiFeedback> alist = (List<AqiFeedback>)FileUtil.readObject(ProPaht+"aqi_feedback.Json");
-        for (AqiFeedback af : alist) {
-            if(af.getAfId().toString().equals(afId)){
-                af.setGmname(realName);
-                af.setState(Integer.valueOf("已指派"));
-                break;
+        try {
+            // 读取 JSON 文件
+            List<AqiFeedback> alist = JsonUtil.readListFromFileSystem(
+                    ProPaht + "aqi_feedback.json",
+                    new TypeReference<List<AqiFeedback>>() {}
+            );
+
+            // 修改对应记录
+            for (AqiFeedback af : alist) {
+                if (af.getAfId().toString().equals(afId)) {
+                    af.setGmname(realName);
+                    af.setState(2); // 设置为“已指派”
+                    break;
+                }
             }
-        }
 
-        FileUtil.writeObject(ProPaht+"aqi_feedback.json", alist);
+            // 写回 JSON 文件
+            JsonUtil.writeListToJson(alist, ProPaht + "aqi_feedback.json");
+
+        } catch (IOException e) {
+            e.printStackTrace(); // 或写日志
+            throw new RuntimeException("写入 JSON 文件失败: " + e.getMessage());
+        }
     }
+
+
 
     @Override
     public void confirmData(AqiFeedback afb) {
@@ -67,7 +82,7 @@ private static final Logger logger = LoggerFactory.getLogger(AqiFeedbackServiceI
         String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
         List<AqiFeedback> afList = null;
         try {
-            afList = (List<AqiFeedback>) JsonUtil.readListfromJson("/NepDatas/JSONData/aqi_feedback.json",new TypeReference<List<AqiFeedback>>() {});
+            afList = (List<AqiFeedback>) JsonUtil.readListFromFileSystem("/NepDatas/JSONData/aqi_feedback.json",new TypeReference<List<AqiFeedback>>() {});
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

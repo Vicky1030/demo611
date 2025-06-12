@@ -14,14 +14,15 @@ import java.util.List;
 public class GridMemberServiceImpl implements GridMemberService {
     @Override
     public GridMember login(String loginCode, String password) throws IOException {
-        String ProPaht = System.getProperty("user.dir") + "/src/main/resources/NepDatas/JSONData/";
+        String path = System.getProperty("user.dir") + "/NepDatas/JSONData/grid_member.json";
 
-        List<GridMember> glist = (List<GridMember>) JsonUtil.readListfromJson("/NepDatas/JSONData/grid_member.json",new TypeReference<List<GridMember>>() {});
-        for(GridMember gm : glist){
-            if(gm.getGmCode().equals(loginCode) && gm.getPassword().equals(password)){
+        List<GridMember> glist = JsonUtil.readListFromFileSystem(path, new TypeReference<List<GridMember>>() {});
+        for (GridMember gm : glist) {
+            if (gm.getGmCode().equals(loginCode) && gm.getPassword().equals(password)) {
                 return gm;
             }
         }
         return null;
     }
+
 }
